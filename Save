@@ -65,6 +65,24 @@ local SaveManager = {} do
 				end
 			end,
 		},
+
+		CurveBox = {
+			Save = function(idx, object)
+				local points = {}
+				if object and object.GetPoints then
+					local curvePoints = object:GetPoints()
+					for i, point in next, curvePoints do
+						table.insert(points, {X = point.X, Y = point.Y})
+					end
+				end
+				return {type = 'CurveBox',idx = idx,points = points}
+			end,
+			Load = function(idx, data)
+				if _G.flags and _G.flags[idx] and _G.flags[idx].SetCurvePoints then
+					_G.flags[idx]:SetCurvePoints(data.points)
+				end
+			end,
+		},
 	}
 
 	function SaveManager:SetIgnoreIndexes(list)
